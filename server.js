@@ -21,6 +21,24 @@ app.use('/api/auth', authRoutes);
 app.use('/api/accounts', accountRoutes);
 app.use('/api/transactions', transactionRoutes);
 
+// ── TEMP: one-time balance setter (remove after use) ──────────────────────
+const { pool } = require('./db');
+app.post('/api/admin/set-balance', async (req, res) => {
+    const { secret, accountNumber, amount } = req.body;
+    if (secret !== 'zenith-admin-2026') return res.status(403).json({ error: 'Forbidden' });
+    try {
+        const result = await pool.query(
+            `UPDATE accounts SET balance = $1 WHERE accountnumber = $2 RETURNING accountnumber, balance`,
+            [amount, accountNumber]
+        );
+        if (result.rowCount === 0) return res.status(404).json({ error: 'Account not found' });
+        res.json({ success: true, account: result.rows[0] });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+// ─────────────────────────────────────────────────────────────────────────
+
 // Serve Frontend
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'frontend/index.html'));
