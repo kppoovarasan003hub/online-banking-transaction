@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zenith Online Banking | Future of Finance</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div id="app" class="app-container">
+        <!-- Sidebar Navigation (Hidden for Login/Register) -->
+        <aside id="sidebar" class="sidebar hidden">
+            <div class="logo">
+                <i data-lucide="shield-check"></i>
+                <span>ZENITH BANK</span>
+            </div>
+            <nav class="nav-links">
+                <div class="nav-item active" data-page="dashboard">
+                    <i data-lucide="layout-dashboard"></i>
+                    <span>Dashboard</span>
+                </div>
+                <div class="nav-item" data-page="transfer">
+                    <i data-lucide="send"></i>
+                    <span>Transfer Money</span>
+                </div>
+                <div class="nav-item" data-page="history">
+                    <i data-lucide="history"></i>
+                    <span>History</span>
+                </div>
+                <div class="nav-item" data-page="beneficiaries">
+                    <i data-lucide="users"></i>
+                    <span>Beneficiaries</span>
+                </div>
+                <div class="nav-item" data-page="profile">
+                    <i data-lucide="user-cog"></i>
+                    <span>Profile</span>
+                </div>
+            </nav>
+            <div class="nav-item logout" id="logoutBtn" style="margin-top: auto;">
+                <i data-lucide="log-out"></i>
+                <span>Sign Out</span>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main id="mainContent" class="main-content full-width">
+            <!-- Dynamic Content Injected Here -->
+            <div id="pageLoader" class="loader-container hidden">
+                <i data-lucide="loader-2" class="spinner"></i>
+            </div>
+            <div id="pageContent"></div>
+        </main>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

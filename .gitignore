@@ -1,0 +1,6 @@
+node_modules
+bank.db
+.env
+.vercel
+dist
+build

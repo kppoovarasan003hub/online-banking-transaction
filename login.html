@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University Login | Course Registration</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="login.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+    <div class="login-page">
+        <div class="login-window fade-in">
+            <!-- Window Title Bar -->
+            <div class="window-header">
+                <span class="window-title">BANK ACCOUNT LOGIN</span>
+                <div class="window-controls">
+                    <div class="control-btn minimize"></div>
+                    <div class="control-btn maximize"></div>
+                    <div class="control-btn close"></div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="window-content">
+                <h1 class="registration-title">ONLINE BANKING TRANSACTION SYSTEM</h1>
+                
+                <p id="errorMessage" class="error-text hidden"></p>
+
+                <form id="loginForm" class="login-form">
+                    <div class="input-group">
+                        <label for="username">Username:</label>
+                        <div class="input-wrapper">
+                            <i data-lucide="user"></i>
+                            <input type="text" id="username" placeholder="Enter your ID" required>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="password">Password:</label>
+                        <div class="input-wrapper">
+                            <i data-lucide="lock"></i>
+                            <input type="password" id="password" placeholder="••••••••" required>
+                        </div>
+                    </div>
+
+                    <div class="actions">
+                        <div class="status-indicator">
+                            <i id="loadingSpinner" data-lucide="loader-2" class="spinner hidden"></i>
+                        </div>
+                        <button type="submit" class="login-button">
+                            <span>Login</span>
+                            <i data-lucide="arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="login.js"></script>
+</body>
+
+</html>

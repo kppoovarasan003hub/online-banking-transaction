@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zenith Bank | Future of Finance</title>
+    <meta name="description" content="Manage your wealth with Zenith Bank's advanced online transaction system. Secure, fast, and futuristic.">
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i data-lucide="shield-check"></i>
+                <span>ZENITH BANK</span>
+            </div>
+            <nav class="nav-links">
+                <div class="nav-item active">
+                    <i data-lucide="layout-dashboard"></i>
+                    <span>Dashboard</span>
+                </div>
+                <div class="nav-item">
+                    <i data-lucide="arrow-left-right"></i>
+                    <span>Transactions</span>
+                </div>
+                <div class="nav-item">
+                    <i data-lucide="credit-card"></i>
+                    <span>My Cards</span>
+                </div>
+                <div class="nav-item">
+                    <i data-lucide="pie-chart"></i>
+                    <span>Analytics</span>
+                </div>
+                <div class="nav-item">
+                    <i data-lucide="settings"></i>
+                    <span>Settings</span>
+                </div>
+            </nav>
+            <div class="nav-item logout" style="margin-top: auto;">
+                <i data-lucide="log-out"></i>
+                <span>Sign Out</span>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header>
+                <div class="welcome-text">
+                    <h1>Dashboard</h1>
+                    <p style="color: var(--text-secondary);">Welcome back, Poovarasan!</p>
+                </div>
+                <div class="header-actions">
+                    <div class="user-profile">
+                        <div class="avatar"></div>
+                        <span>Poovarasan K</span>
+                        <i data-lucide="chevron-down" style="width: 16px;"></i>
+                    </div>
+                </div>
+            </header>
+
+            <section class="dashboard-grid fade-in">
+                <!-- Balance Card -->
+                <div class="card balance-card">
+                    <span class="card-title">Total Balance</span>
+                    <div class="balance-amount">$124,560.80</div>
+                    <div class="stats-row">
+                        <div class="stat-item">
+                            <span class="label">Monthly Income</span>
+                            <div class="value up">+$12,400.00</div>
+                        </div>
+                        <div class="stat-item">
+                            <span class="label">Monthly Expenses</span>
+                            <div class="value down">-$4,210.50</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Savings Card -->
+                <div class="card">
+                    <span class="card-title">Savings Goal</span>
+                    <div style="font-size: 1.5rem; font-weight: 700; margin: 0.5rem 0;">Tesla Model S</div>
+                    <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 10px; margin: 1rem 0;">
+                        <div style="width: 65%; height: 100%; background: var(--accent-secondary); border-radius: 10px;"></div>
+                    </div>
+                    <span style="font-size: 0.8rem; color: var(--text-secondary);">65% of $90,000 reaching soon</span>
+                </div>
+            </section>
+
+            <div class="quick-actions fade-in">
+                <button class="action-btn" id="openTransfer">
+                    <i data-lucide="send"></i>
+                    Transfer Money
+                </button>
+                <button class="action-btn secondary">
+                    <i data-lucide="plus"></i>
+                    Pay Bills
+                </button>
+                <button class="action-btn secondary">
+                    <i data-lucide="download"></i>
+                    Extract Report
+                </button>
+            </div>
+
+            <section class="transactions-section fade-in" style="animation-delay: 0.1s;">
+                <div class="section-title">
+                    <span>Recent Transactions</span>
+                    <a href="#" style="color: var(--accent-primary); text-decoration: none; font-size: 0.875rem;">View All</a>
+                </div>
+                <div class="transactions-list" id="transactionList">
+                    <!-- Transactions will be injected here -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Transfer Modal -->
+    <div class="modal-overlay" id="transferModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Transfer Money</h2>
+                <button class="close-btn" id="closeModal">&times;</button>
+            </div>
+            <form id="transferForm">
+                <div class="form-group">
+                    <label>Recipient Name</label>
+                    <input type="text" placeholder="e.g. John Doe" required id="recipientName">
+                </div>
+                <div class="form-group">
+                    <label>Account Number</label>
+                    <input type="text" placeholder="0000 0000 0000" required id="accNumber">
+                </div>
+                <div class="form-group">
+                    <label>Amount ($)</label>
+                    <input type="number" placeholder="0.00" step="0.01" required id="amount">
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="category">
+                        <option value="Transfer">General Transfer</option>
+                        <option value="Services">Services</option>
+                        <option value="Shopping">Shopping</option>
+                    </select>
+                </div>
+                <button type="submit" class="submit-btn" id="confirmTransfer">Confirm Transaction</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>
