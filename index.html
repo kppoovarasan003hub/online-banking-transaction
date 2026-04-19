@@ -14,6 +14,8 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
+    <!-- Sidebar overlay for mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
     <div class="app-container">
         <!-- Sidebar Navigation -->
         <aside class="sidebar">
@@ -52,9 +54,14 @@
         <!-- Main Content Area -->
         <main class="main-content">
             <header>
-                <div class="welcome-text">
-                    <h1>Dashboard</h1>
-                    <p style="color: var(--text-secondary);">Welcome back, Poovarasan!</p>
+                <div class="welcome-text" style="display:flex;align-items:center;gap:12px;">
+                    <button class="menu-toggle" id="menuToggle" aria-label="Open menu">
+                        <i data-lucide="menu" style="width:22px;height:22px;"></i>
+                    </button>
+                    <div>
+                        <h1>Dashboard</h1>
+                        <p style="color: var(--text-secondary);">Welcome back, Poovarasan!</p>
+                    </div>
                 </div>
                 <div class="header-actions">
                     <div class="user-profile">
@@ -152,6 +159,30 @@
             </form>
         </div>
     </div>
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="bottom-nav" id="bottomNav">
+        <div class="bottom-nav-item active" data-section="dashboard">
+            <i data-lucide="layout-dashboard"></i>
+            <span>Home</span>
+        </div>
+        <div class="bottom-nav-item" data-section="transactions">
+            <i data-lucide="arrow-left-right"></i>
+            <span>Transfers</span>
+        </div>
+        <div class="bottom-nav-item" data-section="cards">
+            <i data-lucide="credit-card"></i>
+            <span>Cards</span>
+        </div>
+        <div class="bottom-nav-item" data-section="analytics">
+            <i data-lucide="pie-chart"></i>
+            <span>Analytics</span>
+        </div>
+        <div class="bottom-nav-item" data-section="settings">
+            <i data-lucide="settings"></i>
+            <span>Settings</span>
+        </div>
+    </nav>
 
     <script src="main.js"></script>
     <script>

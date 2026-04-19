@@ -136,7 +136,45 @@ function showNotification(msg) {
     }, 3000);
 }
 
-// Helper animations style
+// ── Mobile Sidebar Toggle ──────────────────────────────────────────────────
+const sidebar = document.querySelector('.sidebar');
+const menuToggle = document.getElementById('menuToggle');
+const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+function openSidebar() {
+    sidebar.classList.add('open');
+    sidebarOverlay.classList.add('visible');
+    document.body.style.overflow = 'hidden';
+}
+function closeSidebar() {
+    sidebar.classList.remove('open');
+    sidebarOverlay.classList.remove('visible');
+    document.body.style.overflow = '';
+}
+
+if (menuToggle) menuToggle.addEventListener('click', openSidebar);
+if (sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebar);
+
+// Close sidebar on nav item click (mobile)
+document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', () => {
+        if (window.innerWidth <= 768) closeSidebar();
+    });
+});
+
+// ── Bottom Nav Active State ────────────────────────────────────────────────
+document.querySelectorAll('.bottom-nav-item').forEach(item => {
+    item.addEventListener('click', () => {
+        document.querySelectorAll('.bottom-nav-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        // Open transfer modal from bottom nav Transfers tab
+        if (item.dataset.section === 'transactions' && transferModal) {
+            transferModal.style.display = 'flex';
+        }
+    });
+});
+
+// ── Helper animations style
 const style = document.createElement('style');
 style.textContent = `
     @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
