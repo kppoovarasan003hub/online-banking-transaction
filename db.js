@@ -1,101 +1,79 @@
-const sqlite3 = require('sqlite3').verbose();
-const path = require('path');
+const { sql } = require('@vercel/postgres');
 
-const dbPath = path.resolve(__dirname, 'bank.db');
-const db = new sqlite3.Database(dbPath, (err) => {
-    if (err) {
-        console.error('Error opening database', err.message);
-    } else {
-        console.log('Connected to the SQLite database.');
-        initializeDatabase();
-    }
-});
+async function initializeDatabase() {
+    try {
+        console.log('Initializing Postgres Database...');
 
-function initializeDatabase() {
-    db.serialize(() => {
         // Users Table
-        db.run(`CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+        await sql`CREATE TABLE IF NOT EXISTS users (
+            id SERIAL PRIMARY KEY,
             name TEXT NOT NULL,
             email TEXT UNIQUE NOT NULL,
             phone TEXT,
             password TEXT NOT NULL,
             role TEXT DEFAULT 'user',
             isBlocked INTEGER DEFAULT 0,
-            createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
-        )`);
+            createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )`;
 
         // Accounts Table
-        db.run(`CREATE TABLE IF NOT EXISTS accounts (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+        await sql`CREATE TABLE IF NOT EXISTS accounts (
+            id SERIAL PRIMARY KEY,
             accountNumber TEXT UNIQUE NOT NULL,
-            userId INTEGER,
+            userId INTEGER REFERENCES users(id),
             balance REAL DEFAULT 0.0,
-            accountType TEXT DEFAULT 'Savings',
-            FOREIGN KEY(userId) REFERENCES users(id)
-        )`);
+            accountType TEXT DEFAULT 'Savings'
+        )`;
 
         // Transactions Table
-        db.run(`CREATE TABLE IF NOT EXISTS transactions (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            senderId INTEGER,
-            receiverId INTEGER,
+        await sql`CREATE TABLE IF NOT EXISTS transactions (
+            id SERIAL PRIMARY KEY,
+            senderId INTEGER REFERENCES users(id),
+            receiverId INTEGER REFERENCES users(id),
             amount REAL NOT NULL,
-            date DATETIME DEFAULT CURRENT_TIMESTAMP,
+            date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             status TEXT DEFAULT 'completed',
             category TEXT,
-            description TEXT,
-            FOREIGN KEY(senderId) REFERENCES users(id),
-            FOREIGN KEY(receiverId) REFERENCES users(id)
-        )`);
+            description TEXT
+        )`;
 
         // Beneficiaries Table
-        db.run(`CREATE TABLE IF NOT EXISTS beneficiaries (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            userId INTEGER,
+        await sql`CREATE TABLE IF NOT EXISTS beneficiaries (
+            id SERIAL PRIMARY KEY,
+            userId INTEGER REFERENCES users(id),
             name TEXT NOT NULL,
             accountNumber TEXT NOT NULL,
-            ifsc TEXT,
-            FOREIGN KEY(userId) REFERENCES users(id)
-        )`);
+            ifsc TEXT
+        )`;
 
-        // OTPs Table (Simple mockup for now)
-        db.run(`CREATE TABLE IF NOT EXISTS otps (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            email TEXT NOT NULL,
-            code TEXT NOT NULL,
-            expiresAt DATETIME
-        )`);
+        // Seed Admin & Users if empty
+        const { rows } = await sql`SELECT COUNT(*) as count FROM users`;
+        if (parseInt(rows[0].count) === 0) {
+            console.log('Seeding initial data...');
+            
+            // User 1: Admin
+            const adminRes = await sql`INSERT INTO users (name, email, password, role) VALUES ('Super Admin', 'admin@zenith.bank', 'admin123', 'admin') RETURNING id`;
+            const adminId = adminRes.rows[0].id;
+            await sql`INSERT INTO accounts (accountNumber, userId, balance) VALUES ('ACC0001', ${adminId}, 1000000.00)`;
 
-        // Seed Admin & Users
-        db.get(`SELECT COUNT(*) as count FROM users`, (err, row) => {
-            if (row && row.count === 0) {
-                // User 1: Super Admin
-                db.run(`INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)`, 
-                    ['Super Admin', 'admin@zenith.bank', 'admin123', 'admin'], function() {
-                        const adminId = this.lastID;
-                        db.run(`INSERT INTO accounts (accountNumber, userId, balance) VALUES (?, ?, ?)`, 
-                            ['ACC0001', adminId, 1000000.00]);
-                    });
-                
-                // User 2: Kishor
-                db.run(`INSERT INTO users (name, email, password) VALUES (?, ?, ?)`,
-                    ['Kishor', 'kishor@gmail.com', '12340'], function() {
-                        const userId = this.lastID;
-                        db.run(`INSERT INTO accounts (accountNumber, userId, balance) VALUES (?, ?, ?)`, 
-                            ['ACC8899', userId, 124560.80]);
-                    });
+            // User 2: Kishor
+            const kishorRes = await sql`INSERT INTO users (name, email, password) VALUES ('Kishor', 'kishor@gmail.com', '12340') RETURNING id`;
+            const kishorId = kishorRes.rows[0].id;
+            await sql`INSERT INTO accounts (accountNumber, userId, balance) VALUES ('ACC8899', ${kishorId}, 124560.80)`;
 
-                // User 3: Test Recipient
-                db.run(`INSERT INTO users (name, email, password) VALUES (?, ?, ?)`,
-                    ['Test Recipient', 'test@gmail.com', 'test123'], function() {
-                        const testId = this.lastID;
-                        db.run(`INSERT INTO accounts (accountNumber, userId, balance) VALUES (?, ?, ?)`, 
-                            ['ACC1234', testId, 500.00]);
-                    });
-            }
-        });
-    });
+            // User 3: Test Recipient
+            const testRes = await sql`INSERT INTO users (name, email, password) VALUES ('Test Recipient', 'test@gmail.com', 'test123') RETURNING id`;
+            const testId = testRes.rows[0].id;
+            await sql`INSERT INTO accounts (accountNumber, userId, balance) VALUES ('ACC1234', ${testId}, 500.00)`;
+        }
+
+        console.log('Postgres Database initialized successfully.');
+    } catch (err) {
+        console.error('Error initializing Postgres Database:', err.message);
+    }
 }
 
-module.exports = db;
+// Call init
+initializeDatabase();
+
+module.exports = { sql };
